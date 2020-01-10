@@ -1,14 +1,14 @@
 (function() {
     
-var SETTINGS_GRAVITY = 0.07,
+var SETTINGS_GRAVITY = 0.1,
     SETTINGS_FPS = 30,
     SETTINGS_BALL_NUM = 1,
-    SETTINGS_BOUND_X = 0.13,
+    SETTINGS_BOUND_X = 0.3,
     SETTINGS_BOUND_Y = 1.04,
     SETTINGS_ACCELEROMETER_RELOAD_FREQ = 100,
     SETTINGS_PADDLE_ACCEL = 2.8,
     SETTINGS_POINT = 1000,
-    SETTINGS_POINT_SILVER = 200,
+    SETTINGS_POINT_SILVER = 5000,
     SETTINGS_POINT_GOLD = 3000000;
     
 var GAMESTATE_STOP = 0,
@@ -42,15 +42,15 @@ var BB = {
     // Create blocks map
     setMap: function() {
         var blockMap = [
-            [null,      null,       null,       null,       null,       'blue',     null,       null,       null,       null],
-            [null,      null,       null,       null,       'red',      'red',      'blue',     null,       null,       null],
-            [null,      null,       null,       'red',      'red',      null,       null,       'blue',     null,       null],
-            [null,      null,       'red',      'red',      null,       null,       null,       null,       'blue',     null],    
-            [null,      'red',      'red',      null,       null,       'gold',     null,       null,       'silver',   'silver'],    
-            [null,      null,       'red',      'red',       null,       null,       null,       'silver',   'silver',   null],    
-            [null,      null,       null,       'red',      'red',       null,       'silver',   'silver',   null,       null],    
-            [null,      null,       null,       null,       'silver',   'silver',   'silver',   null,       null,       null],
-            [null,      null,       null,       null,       null,       'silver',   null,       null,       null,       null]
+            [null,      'silver',       'silver',       'silver',     'silver',  'silver',       'silver',     'silver',       'silver',       'silver',       null],
+            [null,      'silver',       null,       null,       null,      null,      null,     null,       null,       'silver'],
+            [null,      'silver',       null,       null,      'red',      'red',       'red',       null,     null,       'silver'],
+            [null,      'silver',       null,      null,      'red',       'red',       'red',       null,       null,     'silver'],    
+            [null,    'silver',      null,      null,       'red',       'red',     'red',       null,       null,   'silver'],    
+            [null,      'silver',       null,      null,       'red',       'red',       'red',       null,   null,   'silver'],    
+            [null,      'silver',       null,       null,      'red',       'red',       'red',   null,   null,       'silver'],    
+            [null,      'silver',       null,       null,       null,   null,   null,   null,       null,       'silver'],
+            [null,      'silver',       'silver',       'silver',       'silver',       'silver',   'silver',       'silver',       'silver',       'silver']
         ];
         
         for(j = 0; j < blockMap.length; j++) {
@@ -268,14 +268,16 @@ var BB = {
     endGame: function() {
         BB.gameState = GAMESTATE_STOP;
         vibrate();
+        ncmbController.sendScore(BB.score);
     },
     
     // Game Clear
     clearGame: function() {
-        if(typeof navigator.notification !== 'undefined') navigator.notification.alert("Cleared!", function(){}, "Congraturations");
-        else alert("Cleared!");
+       // if(typeof navigator.notification !== //'undefined') navigator.notification.alert//("Cleared!", function(){}, "Congraturations");
+       // else alert("Cleared!");
         
         BB.gameState = GAMESTATE_STOP;
+        ncmbController.sendScore(BB.score);
     }
 }
 
@@ -337,6 +339,8 @@ function init() {
     });
 
     requestAnimFrame(animate);
+    ncmbController.init(BB.screenSize);
+
 }
 
 
